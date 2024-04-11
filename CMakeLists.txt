@@ -6,11 +6,9 @@ project(${PROJECT_NAME})
 
 find_package(SDL2 REQUIRED)
 
-include_directories(${SDL2_INCLUDE_DIRS})
+include_directories(${SDL2_INCLUDE_DIRS} ${SDL2_IMAGE_INCLUDE_DIRS})
 
-set(SOURCE_FILES
-    Main.cpp
-)
+file(GLOB SOURCE_FILES "${CMAKE_SOURCE_DIR}/src/*.cpp")
 
 # add_library(NeuraCraft SHARED ${SOURCE_FILES})
 
@@ -22,8 +20,11 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin
 )
 
+find_package(PkgConfig)
 find_package(SDL2 REQUIRED)
 
-target_include_directories(${PROJECT_NAME} PRIVATE ${SDL2_INCLUDE_DIRS})
+pkg_check_modules(SDL2_IMAGE REQUIRED SDL2_image>=2.0.0)
 
-target_link_libraries(${PROJECT_NAME} ${SDL2_LIBRARIES})
+target_include_directories(${PROJECT_NAME} PRIVATE)
+
+target_link_libraries(${PROJECT_NAME} ${SDL2_LIBRARIES} ${SDL2_IMAGE_LIBRARIES})
